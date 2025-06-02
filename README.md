@@ -6,9 +6,9 @@ An attempt at extrapolating likely pageview counts based on website rankings in 
 
 | Source                                          | Description                                                                    | Last updated |
 | ----------------------------------------------- | ------------------------------------------------------------------------------ | ------------ |
-| [analytics.usa.gov](https://analytics.usa.gov/) | Top hostnames, 30 days (10k websites)                                          | 2024-09-09   |
-| [Tranco](https://tranco-list.eu/)               | "latest list", 30 days (1M websites)                                           | 2024-09-09   |
-| [CrUX](https://developer.chrome.com/docs/crux)  | [Cached Chrome Top Million Websites](https://github.com/zakird/crux-top-lists) | 2024-08-14   |
+| [analytics.usa.gov](https://analytics.usa.gov/) | Top hostnames, 30 days (10k websites)                                          | 2025-06-02   |
+| [Tranco](https://tranco-list.eu/)               | "latest list", 30 days (1M websites)                                           | 2025-06-02   |
+| [CrUX](https://developer.chrome.com/docs/crux)  | [Cached Chrome Top Million Websites](https://github.com/zakird/crux-top-lists) | 2025-05-14   |
 
 ## Results
 
@@ -40,7 +40,7 @@ With [DuckDB](https://duckdb.org/):
 ```sql
 create table tranco as select * from './tranco-top-1m.csv';
 create table analytics as select * from './top-10000-analytics-30d.csv';
-create table crux as select * from './current.csv';
+create table crux as select * from './crux-current.csv';
 create table mapping as (
   select
     a.hostname,
@@ -66,13 +66,13 @@ Pageview scores are given for 365 days.
 
 | crux_rank | min_pageviews | max_pageviews | median_pageviews | avg_pageviews | count |
 | --------: | ------------: | ------------: | ---------------: | ------------: | ----: |
-|      1000 |    2944146696 |    4543442510 |       3743794603 |    3743794603 |     2 |
-|      5000 |          2615 |    4086099226 |        969861891 |    1160648800 |    17 |
-|     10000 |      77886985 |    1670330142 |        505802570 |     546856260 |     8 |
-|     50000 |          1606 |     720381544 |        105333938 |     140603434 |    55 |
-|    100000 |          2932 |     390257476 |         33557874 |      50807897 |    70 |
-|    500000 |          1399 |    1249634537 |          7759115 |      18421315 |   336 |
-|   1000000 |          1679 |      67022845 |          2335489 |       3763187 |   283 |
+|      1000 |    1122257373 |    4901342883 |       3011800128 |    3011800128 |     2 |
+|      5000 |         57585 |    3190859078 |        857927585 |    1262516310 |    11 |
+|     10000 |     108382857 |     845000039 |        513925396 |     459828372 |     8 |
+|     50000 |       2717766 |    1731045606 |        121969002 |     188932971 |    50 |
+|    100000 |          8809 |    4140446789 |         40783823 |     133256552 |    56 |
+|    500000 |          1691 |    1367230152 |          8542119 |      24123590 |   290 |
+|   1000000 |          2798 |      78538826 |          2793260 |       4858734 |   233 |
 
 ```sql
 select
@@ -122,8 +122,11 @@ copy (
 ## Get the data
 
 ```bash
+# Manually get tranco data from https://tranco-list.eu/.
 wget https://analytics.usa.gov/data/live/top-10000-domains-30-days.csv
 grep -E 'hostname,pageviews,visits|\.gov|\.mil' top-10000-domains-30-days.csv > top-10000-analytics-30d.csv
+rm top-10000-domains-30-days.csv
 wget https://raw.githubusercontent.com/zakird/crux-top-lists/main/data/global/current.csv.gz
 extract current.csv.gz
+mv current.csv crux-current.csv
 ```
