@@ -12,20 +12,23 @@ An attempt at extrapolating likely pageview counts based on website rankings in 
 
 ## Results
 
-|  CrUX Rank | Pageviews (median) | Extrapolated |
-| ---------: | -----------------: | -----------: |
-|      1,000 |      3,743,794,604 |              |
-|      5,000 |        969,861,891 |              |
-|     10,000 |        505,802,570 |              |
-|     50,000 |        105,333,939 |              |
-|    100,000 |         33,557,875 |              |
-|    500,000 |          7,759,115 |              |
-|  1,000,000 |          2,335,489 |              |
-|  5,000,000 |                    |      612,733 |
-| 10,000,000 |                    |      293,886 |
-| 50,000,000 |                    |       53,367 |
+|       CrUX Rank | Pageviews (median) | Extrapolated |
+| --------------: | -----------------: | -----------: |
+|           1,000 |      3,011,800,128 |              |
+|           5,000 |        857,927,585 |              |
+|          10,000 |        513,925,396 |              |
+|          50,000 |        121,969,002 |              |
+|         100,000 |         40,783,823 |              |
+|         500,000 |          8,542,119 |              |
+|       1,000,000 |          2,793,260 |              |
+|       5,000,000 |                    |      769,638 |
+|      10,000,000 |                    |      382,161 |
+|      50,000,000 |                    |       75,212 |
+| Unranked (100M) |                    |       37,346 |
 
-5M, 10M, 50M values extrapolated based on a power series trend line of `7.73E+12x^-1.06`. R² = 0.992.
+5M, 10M, 50M, "unranked" 100M values extrapolated based on a power series trend line of `4.49E+12x^-1.01`. R² = 0.988.
+
+Google Sheets formula: `=4.49 * POWER(10 , 12) * A1^(-1.01)`
 
 View the data in Google Sheets: [CrUX rank to pageviews](https://docs.google.com/spreadsheets/d/14kjXr9clXqH4mEhXpkutlUTkNtJrb0OxX8VaQMoEHVA/edit?gid=0#gid=0)
 
@@ -113,10 +116,10 @@ copy (
 ## Caveats
 
 - CrUX ranks origins (including protocol and full), while Tranco ranks hostnames.
-- Only 771 data points are available, 80% of which are for the 500k/1M ranks.
+- Only 650 data points are available, 80% of which are for the 500k/1M ranks.
 - The date ranges differ, so the site traffic reflected in the ranks and page views are for different time periods.
 - The pageviews dataset is for websites primarily intended for a USA audience, while the rankings are global.
-- Yearly pageview data is extrapolated from a specific 30-day period over the summer months in North America.
+- Yearly pageview data is extrapolated from a specific 30-day period so will show seasonal patterns relevant for North America.
 - There is no data for CrUX ranks above 1M (5M, 10M, 50M).
 
 ## Get the data
