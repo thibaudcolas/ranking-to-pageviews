@@ -38,9 +38,9 @@ The above results are based on CrUX ranks only. Tranco ranks results are shared 
 With [DuckDB](https://duckdb.org/):
 
 ```sql
-create table tranco as select * from './top-1m.csv';
-create table analytics as select * from './top-10000-domains-30-days.csv';
-create table crux as select * from './20240814-crux-current.csv';
+create table tranco as select * from './tranco-top-1m.csv';
+create table analytics as select * from './top-10000-analytics-30d.csv';
+create table crux as select * from './current.csv';
 create table mapping as (
   select
     a.hostname,
@@ -77,11 +77,11 @@ Pageview scores are given for 365 days.
 ```sql
 select
     crux_rank,
-    min(pageviews * 365.0 / 30.0) as min_pageviews_365,
-    max(pageviews * 365.0 / 30.0) as max_pageviews_365,
-    median(pageviews * 365.0 / 30.0) as median_pageviews_365,
-    avg(pageviews * 365.0 / 30.0) as avg_pageviews_365,
-    count(pageviews) as count_pageviews
+    cast(round(min(pageviews * 365.0 / 30.0)) as bigint) as min_pageviews,
+    cast(round(max(pageviews * 365.0 / 30.0)) as bigint) as max_pageviews,
+    cast(round(median(pageviews * 365.0 / 30.0)) as bigint) as median_pageviews,
+    cast(round(avg(pageviews * 365.0 / 30.0)) as bigint) as avg_pageviews,
+    count(pageviews) as count
 from
     mapping
 group by
@@ -99,7 +99,7 @@ copy (
   select
       tranco_domain,
       tranco_rank,
-      pageviews * 365.0 / 30.0 as pageviews_365,
+      cast(round(pageviews * 365.0 / 30.0) as bigint) as pageviews_365,
       crux_rank
   from
       mapping
@@ -118,3 +118,12 @@ copy (
 - The pageviews dataset is for websites primarily intended for a USA audience, while the rankings are global.
 - Yearly pageview data is extrapolated from a specific 30-day period over the summer months in North America.
 - There is no data for CrUX ranks above 1M (5M, 10M, 50M).
+
+## Get the data
+
+```bash
+wget https://analytics.usa.gov/data/live/top-10000-domains-30-days.csv
+grep -E 'hostname,pageviews,visits|\.gov|\.mil' top-10000-domains-30-days.csv > top-10000-analytics-30d.csv
+wget https://raw.githubusercontent.com/zakird/crux-top-lists/main/data/global/current.csv.gz
+extract current.csv.gz
+```
