@@ -133,3 +133,7 @@ wget https://raw.githubusercontent.com/zakird/crux-top-lists/main/data/global/cu
 extract current.csv.gz
 mv current.csv crux-current.csv
 ```
+
+## License
+
+License: public domain dedication ([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)).
