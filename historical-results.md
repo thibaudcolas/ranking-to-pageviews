@@ -2,6 +2,24 @@
 
 This can be useful to quantify website traffic in the past.
 
+## 2025-01-01 to 2025-12-31
+
+Based on daily visits to the sites extrapolated to 365 days. Note: unranked "100M" data point is extrapolated.
+
+|   CrUX Rank | Pageviews (median) |
+| ----------: | -----------------: |
+|       1,000 |      3,708,318,966 |
+|       5,000 |        207,920,905 |
+|      10,000 |        110,544,239 |
+|      50,000 |         27,896,423 |
+|     100,000 |         11,373,727 |
+|     500,000 |          3,695,806 |
+|   1,000,000 |          1,500,611 |
+|   5,000,000 |            319,711 |
+|  10,000,000 |             89,538 |
+|  50,000,000 |             60,304 |
+| 100,000,000 |             15,482 |
+
 ## 2025-06-02
 
 CrUX data from 2025-05-14.

@@ -4,3 +4,5 @@ crux-current.csv
 top-10000-analytics-30d.csv
 tranco-pageviews.csv
 tranco-top-1m.csv
+*.duckdb
+.tranco
