@@ -126,7 +126,7 @@ def main() -> None:
         sys.exit(1)
 
     db_path = Path("analytics_data.duckdb")
-    parquet_path = Path("analytics_data.parquet.zst")
+    parquet_path = Path("domain_analytics.parquet.zst")
     batch_size = 1000
 
     resume = f", resume page {args.start_page}" if args.start_page > 1 else ""
