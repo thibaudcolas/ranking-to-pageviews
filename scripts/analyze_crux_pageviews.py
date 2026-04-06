@@ -30,15 +30,17 @@ from pathlib import Path
 
 import duckdb
 import matplotlib.pyplot as plt
-from matplotlib.ticker import EngFormatter
 import numpy as np
 import seaborn as sns
+from matplotlib.ticker import EngFormatter
 from scipy.stats import linregress
 
-REPO_ROOT = Path(__file__).resolve().parent
-DEFAULT_SQL = REPO_ROOT / "yearly_pageviews.sql"
-DEFAULT_DB = REPO_ROOT / "analytics_data.duckdb"
-DEFAULT_OUTPUT = REPO_ROOT / "yearly-pageviews-by-crux-rank.png"
+from usa_gov_ratios import ensure_usa_gov_ratios
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_SQL = SCRIPT_DIR / "yearly_pageviews.sql"
+DEFAULT_DB = SCRIPT_DIR / ".." / "analytics_data.duckdb"
+DEFAULT_OUTPUT = SCRIPT_DIR / ".." / "yearly-pageviews-by-crux-rank.png"
 
 EXTRAPOLATION_RANKS = (5_000_000, 10_000_000, 50_000_000, 100_000_000)
 
@@ -75,8 +77,9 @@ def main() -> None:
         sys.exit(1)
 
     sql_text = args.sql.read_text()
-    con = duckdb.connect(str(args.db), read_only=False)
+    con = duckdb.connect(str(args.db))
     try:
+        ensure_usa_gov_ratios(con)
         con.execute(sql_text)
         df = con.execute(
             """

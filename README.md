@@ -4,23 +4,23 @@ Extrapolating analytics pageview counts based on website rankings in the [CrUX](
 
 ## Results
 
-|       CrUX Rank | Pageviews (median) |
-| --------------: | -----------------: |
-|           1,000 |      3,708,318,966 |
-|           5,000 |        207,920,905 |
-|          10,000 |        110,544,239 |
-|          50,000 |         27,896,423 |
-|         100,000 |         11,373,727 |
-|         500,000 |          3,695,806 |
-|       1,000,000 |          1,500,611 |
-|       5,000,000 |            319,711 |
-|      10,000,000 |             89,538 |
-|      50,000,000 |             60,304 |
-| Unranked (100M) |             15,482 |
+|       CrUX Rank | Yearly pageviews (median) | Yearly visits (median) |
+| --------------: | ------------------------- | ---------------------: |
+|           1,000 | 5,635,262,223             |          3,708,318,966 |
+|           5,000 | 455,186,749               |            207,920,905 |
+|          10,000 | 347,628,752               |            110,544,239 |
+|          50,000 | 79,445,520                |             27,896,423 |
+|         100,000 | 24,937,909                |             11,373,727 |
+|         500,000 | 11,686,691                |              3,695,806 |
+|       1,000,000 | 2,883,598                 |              1,500,611 |
+|       5,000,000 | 572,851                   |                319,711 |
+|      10,000,000 | 244,734                   |                 89,538 |
+|      50,000,000 | 88,839                    |                 60,304 |
+| Unranked (100M) | 31,867                    |                 15,482 |
 
-The "unranked" 100M value is extrapolated based on a power law: 1.559E+12 × rank^-1.0004, R²: 0.9832.
+The "unranked" 100M value is extrapolated beyond observed data, based on a power law: 4.013E+12 × rank^-1.0125, R²: 0.9910.
 
-Google Sheets formula: `=1.559 * POWER(10 , 12) * A1^(-1.0004)`
+Google Sheets formula: `=4.013 * POWER(10 , 12) * A1^(-1.0125)`
 
 View the data in Google Sheets: [CrUX rank to pageviews](https://docs.google.com/spreadsheets/d/14kjXr9clXqH4mEhXpkutlUTkNtJrb0OxX8VaQMoEHVA/edit?gid=0#gid=0)
 

@@ -14,19 +14,22 @@ and exports to Parquet format for further analysis.
 
 Usage:
     export GSA_API_KEY="your-api-key-here"
-    ./download_analytics_data.py
+    ./download_domain_analytics.py
 
     # Resume from a specific page
-    ./download_analytics_data.py --start-page 42
+    ./download_domain_analytics.py --start-page 42
 """
 
 import argparse
 import os
 import sys
 import time
+from pathlib import Path
 
 import duckdb
 import requests
+
+from usa_gov_ratios import populate_usa_gov_ratios
 
 API_URL = "https://api.gsa.gov/analytics/dap/v2.0.0/reports/domain/data"
 
@@ -38,7 +41,7 @@ def fetch_page(
     page: int,
     limit: int = 10000,
     max_retries: int = 5,
-) -> list:
+) -> list[dict]:
     headers = {"X-Api-Key": api_key}
     params = {"after": after, "before": before, "limit": limit, "page": page}
 
@@ -75,7 +78,7 @@ def fetch_all_data(
         except requests.RequestException as e:
             print(f"\nError fetching page {page}: {e}", file=sys.stderr)
             print("\nTo resume from this page, run:")
-            print(f"  uv run download_analytics_data.py --start-page {page}")
+            print(f"  uv run download_domain_analytics.py --start-page {page}")
             raise
 
         if not data:
@@ -95,7 +98,7 @@ def fetch_all_data(
         time.sleep(0.5)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Download GSA analytics data and store in DuckDB"
     )
@@ -122,14 +125,16 @@ def main():
         print("Error: GSA_API_KEY environment variable not set", file=sys.stderr)
         sys.exit(1)
 
-    db_path = "analytics_data.duckdb"
-    parquet_path = "analytics_data.parquet.zst"
+    db_path = Path("analytics_data.duckdb")
+    parquet_path = Path("analytics_data.parquet.zst")
     batch_size = 1000
 
     resume = f", resume page {args.start_page}" if args.start_page > 1 else ""
     print(f"Downloading {args.start_date} … {args.end_date} → {db_path}{resume}")
 
-    con = duckdb.connect(db_path)
+    con = duckdb.connect(str(db_path))
+    print("Loading visits→pageviews ratios from analytics.usa.gov JSON…")
+    populate_usa_gov_ratios(con)
     con.execute("""
         CREATE TABLE IF NOT EXISTS domain_analytics (
             date DATE NOT NULL,
@@ -179,7 +184,7 @@ def main():
 
     con.execute(f"""
         COPY domain_analytics
-        TO '{parquet_path}'
+        TO '{parquet_path.as_posix()}'
         (FORMAT PARQUET, COMPRESSION ZSTD)
     """)
 
