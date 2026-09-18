@@ -1,39 +1,31 @@
 # AI Referrals to US Government Websites
 
-Tracking how much traffic AI assistants (ChatGPT, Perplexity, Claude, Gemini, Copilot) send to US government websites, using public data from the [Digital Analytics Program (DAP)](https://analytics.usa.gov/).
+How much traffic do AI assistants (ChatGPT, Perplexity, Claude, Gemini, Copilot, Grok, DeepSeek…) send to US government websites? This project tracks the answer over time, using public data from the [Digital Analytics Program (DAP)](https://analytics.usa.gov/) — the analytics platform behind [analytics.usa.gov](https://analytics.usa.gov/), covering thousands of federal websites.
 
-## Quick start
+## Read the analysis
+
+**→ [`REPORT.md`](REPORT.md)** — key findings, tables, and charts.
+
+Headline numbers as of August 2026 (latest complete month):
+
+- AI referrals are **1.49%** of total traffic to DAP sites (56M visits in August 2026).
+- They have grown **+311%** between complete quarters (2025Q1 → 2026Q2).
+- That is roughly **26% of the traffic Bing sends** — from essentially zero in early 2024.
+
+All figures are computed over complete months only; the in-progress month and the handful of days missing from the API are excluded (see the report's "Data coverage" section).
+
+## How it works
+
+A single script, [`ai_referrals.py`](ai_referrals.py), fetches daily traffic-source data from the [DAP API](https://open.gsa.gov/api/dap/), stores it in a DuckDB database (with a Git LFS-backed parquet copy), and regenerates the report and charts. Re-runs only fetch missing days, so they take seconds.
+
+## Running it
 
 ```bash
-# Get a free API key at https://api.data.gov/signup/
+# Free API key: https://api.data.gov/signup/
 export GSA_API_KEY=your_key_here
-
-# Run the analysis (uses uv for dependency management)
 ./ai_referrals.py
 ```
 
-The script fetches data, prints a summary table, generates charts, and writes a full report to [`REPORT.md`](REPORT.md).
+Requires [uv](https://docs.astral.sh/uv/) and Python 3.12+ (dependencies are declared inline via PEP 723).
 
-## What it does
-
-1. **Fetches** daily traffic-source data from the [DAP API](https://open.gsa.gov/api/dap/) (v2.0.0), from July 2023 to present
-2. **Caches** raw API responses in `.cache/` so re-runs don't re-fetch completed months
-3. **Analyzes** traffic patterns, comparing AI referrals to traditional sources (Google, Bing, Direct, Yahoo, DuckDuckGo)
-4. **Generates** four charts (PNG + interactive HTML):
-   - `ai_referrals_trend` — weekly visits by individual AI source
-   - `ai_share_pct` — AI share of total traffic (%) with total traffic volume overlay
-   - `ai_vs_traditional` — log-scale comparison of AI total vs traditional sources
-   - `traffic_source_mix` — 100% stacked area of all major traffic categories
-5. **Writes** a Markdown report ([`REPORT.md`](REPORT.md)) with key metrics, tables, and embedded charts
-
-## Data source
-
-All data comes from the DAP [traffic-source report](https://open.gsa.gov/api/dap/#available-reports), which tracks visits to US federal government websites by referral source. The DAP covers [thousands of government domains](https://analytics.usa.gov/).
-
-AI sources are identified by matching the `source` field: `chatgpt.com`, `claude.ai`, `copilot.com`, `copilot.microsoft.com`, `gemini.google.com`, `perplexity`, `perplexity.ai`.
-
-## Requirements
-
-- Python 3.12+
-- [uv](https://docs.astral.sh/uv/) (dependencies are declared inline via PEP 723, no `requirements.txt` needed)
-- A [api.data.gov API key](https://api.data.gov/signup/) in `GSA_API_KEY` (falls back to `DEMO_KEY1`, which has strict rate limits)
+Setup details, the data pipeline, Git LFS handling, and data caveats are documented in [`CONTRIBUTING.md`](CONTRIBUTING.md).
