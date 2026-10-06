@@ -14,6 +14,16 @@ Headline numbers as of August 2026 (latest complete month):
 
 All figures are computed over complete months only; the in-progress month and the handful of days missing from the API are excluded (see the report's "Data coverage" section).
 
+## Charts
+
+[![AI referral trends by source](./assets/ai_referrals_trend.png)](./REPORT.md)
+
+[![AI share of total traffic](./assets/ai_share_pct.png)](./REPORT.md)
+
+[![AI referrals vs traditional traffic sources](./assets/ai_vs_traditional.png)](./REPORT.md)
+
+[![Traffic source mix](./assets/traffic_source_mix.png)](./REPORT.md)
+
 ## How it works
 
 A single script, [`ai_referrals.py`](ai_referrals.py), fetches daily traffic-source data from the [DAP API](https://open.gsa.gov/api/dap/), stores it in a DuckDB database (with a Git LFS-backed parquet copy), and regenerates the report and charts. Re-runs only fetch missing days, so they take seconds.

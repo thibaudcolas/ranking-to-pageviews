@@ -26,6 +26,14 @@ View the data in Google Sheets: [CrUX rank to pageviews](https://docs.google.com
 
 [![Yearly pageviews by CrUX rank (log scale)](./yearly-pageviews-by-crux-rank.png)](./yearly-pageviews-by-crux-rank.png)
 
+## AI referral traffic
+
+A companion analysis tracks how much traffic AI assistants (ChatGPT, Perplexity, Claude, Gemini, Copilot, and others) send to US government websites via the same [analytics.usa.gov](https://analytics.usa.gov/) data. As of August 2026, AI referrals are **1.49%** of total DAP traffic and have grown **+311%** quarter-over-quarter since early 2025.
+
+See **[ai-referrals/](ai-referrals/)** for the full report, methodology, and charts.
+
+[![AI referral trends to US government websites](./ai-referrals/assets/ai_referrals_trend.png)](./ai-referrals/REPORT.md)
+
 ## Data sources
 
 | Source                                          | Description                          | Last updated             |
